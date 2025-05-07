@@ -1,33 +1,20 @@
-from flask import Flask, render_template
+def find_first_pe(prices, eps, index):
+    pe = prices[index]/eps[index]
+    return pe
 
-skills_app = Flask(__name__)
+numbers = [3, 6, 2, 4, 3, 6, 8, 9]
+duplicate = None
+for i in range(len(numbers)):
+    for j in range(i+1, len(numbers)):
+        if numbers[i] == numbers[j]:
+            print(numbers[i] + " is a dupliacate")
+            break
 
-my_skills = [("html", 80), ("CSS", 75), ("Python", 95), ("MySQL", 45), ("go", 35)]
+for i in range(len(numbers)):
+    if numbers[i] == duplicate:
+        print(i)
 
-@skills_app.route("/")
-def homepage():
-    return render_template("homepage.html", 
-                           title="Homepage", 
-                           custom_css="home")
+for i in range(len(numbers)):
+    if numbers[i] == 68:
+        print(i)
 
-@skills_app.route("/add")
-def add():
-    return render_template("add.html", 
-                           title="Add Skill", 
-                           custom_css="add")
-
-@skills_app.route("/about")
-def about():
-    return render_template("about.html", title="About Us")
-
-@skills_app.route("/skills")
-def skills():
-    return render_template("skills.html", 
-                           title="My Skills", 
-                           page_head="My Skills", 
-                           description="This Is My Skills Page",
-                           skills=my_skills,
-                           custom_css="skills")
-
-if __name__ == "__main__":
-    skills_app.run(debug=True, port=9000)
