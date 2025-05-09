@@ -1,134 +1,109 @@
-######### LESSON 3 #########
-class Node:
-    def __init__(self, data=None, next=None, prev=None):
-        self.data = data
-        self.next = next
-        self.prev = prev
+################################# FIRST QUESTION #################################
+arr = []
 
-class DoublyLinkedList:
+data = [
+    "jan 1,27", "jan 2,31", "jan 3,23", "jan 4,34", "jan 5,37",
+    "jan 6,38", "jan 7,29", "jan 8,30", "jan 9,35", "jan 10,30"
+]
+
+for line in data:
+    try:
+        tokens = line.split(",")
+        temperature =int(tokens[1])
+        arr.append(temperature)
+    except Exception as e:
+        print(f"Invaild temperature in row{line}: {e}. ingnoring this row.")
+
+first_week_temps = arr[:7]
+average_temp = sum(first_week_temps) / len(first_week_temps)
+
+print(f"Average temperature is the first week if January: {average_temp:.2f}°f")
+
+max_temp = max(arr[:10])
+print(f"Maximum tempertaure in the first 10 days 10 of january: {max_temp}°f")
+
+################################# SECOND QUESTION #################################
+
+arr = []
+
+data = [
+    "jan 1,27", "jan 2,31", "jan 3,23", "jan 4,34", "jan 5,37",
+    "jan 6,38", "jan 7,29", "jan 8,30", "jan 9,35", "jan 10,30"
+]
+
+for entry in data:
+    data, temp = entry.split(",")
+    try:
+        temperature = int(temp)
+        arr.append(temperature)
+    except ValueError as e:
+        print(f"Invalid temperature entry: {e}")
+
+jan_9_temp = arr[8]
+jan_4_temp = arr[3]
+
+print(f"The temperature on jan 9 was: {jan_9_temp}°F")
+print(f"The temperature on jan 4 was: {jan_4_temp}°F")
+
+################################# THIRD QUESTION #################################
+
+import string
+
+# Step 1: Open the file and read its contents
+with open(r"C:\Users\ibrahim\Downloads\Python\New Text Document.txt", "r", encoding="utf-8") as f:
+    poem = f.read().lower()  # Convert to lowercase for case-insensitive counting
+
+# Step 2: Remove punctuation and split the text into words
+translator = str.maketrans('', '', string.punctuation)
+poem = poem.translate(translator)
+
+words = poem.split()  # Split the text into words
+
+# Step 3: Count the frequency of each word using a dictionary
+word_count = {}
+
+for word in words:
+    if word in word_count:
+        word_count[word] += 1
+    else:
+        word_count[word] = 1
+
+# Step 4: Print the results
+for word, count in word_count.items():
+    print(f"'{word}': {count}")
+
+################################# FOURTH QUESTION #################################
+
+class HashTable:
     def __init__(self):
-        self.head = None
+        self.size = 10
+        self.table = [None] * self.size
+    
+    def _hash(self, key):
+        return hash(key) % self.size
+    
+    def insert(self, key, value):
+        index = self._hash(key)
+        
+        # Linear probing to handle collisions
+        while self.table[index] is not None:
+            index = (index + 1) % self.size
+        
+        self.table[index] = (key, value)
+    
+    def display(self):
+        for index, item in enumerate(self.table):
+            if item is not None:
+                print(f"Index {index}: {item}")
 
-    def print_forward(self):
-        if self.head is None:
-            print("Linked list is empty")
-            return
+# Create hash table and insert months with the number of days
+hash_table = HashTable()
 
-        itr = self.head
-        llstr = ''
-        while itr:
-            llstr += str(itr.data) + ' --> '
-            itr = itr.next
-        print(llstr)
+hash_table.insert("January", 31)
+hash_table.insert("February", 28)
+hash_table.insert("March", 31)
+hash_table.insert("April", 30)
+hash_table.insert("May", 31)
 
-    def print_backward(self):
-        if self.head is None:
-            print("Linked list is empty")
-            return
-
-        last_node = self.get_last_node()
-        itr = last_node
-        llstr = ''
-        while itr:
-            llstr += itr.data + '-->'
-            itr = itr.prev
-        print("Link list in reverse: ", llstr)
-
-    def get_last_node(self):
-        itr = self.head
-        while itr.next:
-            itr = itr.next
-
-        return itr
-
-    def get_length(self):
-        count = 0
-        itr = self.head
-        while itr:
-            count+=1
-            itr = itr.next
-
-        return count
-
-    def insert_at_begining(self, data):
-        if self.head == None:
-            node = Node(data, self.head, None)
-            self.head = node
-        else:
-            node = Node(data, self.head, None)
-            self.head.prev = node
-            self.head = node
-
-    def insert_at_end(self, data):
-        if self.head is None:
-            self.head = Node(data, None, None)
-            return
-
-        itr = self.head
-
-        while itr.next:
-            itr = itr.next
-
-        itr.next = Node(data, None, itr)
-
-    def insert_at(self, index, data):
-        if index<0 or index>self.get_length():
-            raise Exception("Invalid Index")
-
-        if index==0:
-            self.insert_at_begining(data)
-            return
-
-        count = 0
-        itr = self.head
-        while itr:
-            if count == index - 1:
-                node = Node(data, itr.next, itr)
-                if node.next:
-                    node.next.prev = node
-                itr.next = node
-                break
-
-            itr = itr.next
-            count += 1
-
-    def remove_at(self, index):
-        if index<0 or index>=self.get_length():
-            raise Exception("Invalid Index")
-
-        if index==0:
-            self.head = self.head.next
-            self.head.prev = None
-            return
-
-        count = 0
-        itr = self.head
-        while itr:
-            if count == index:
-                itr.prev.next = itr.next
-                if itr.next:
-                    itr.next.prev = itr.prev
-                break
-
-            itr = itr.next
-            count+=1
-
-    def insert_values(self, data_list):
-        self.head = None
-        for data in data_list:
-            self.insert_at_end(data)
-
-
-if __name__ == '__main__':
-    ll = DoublyLinkedList()
-    ll.insert_values(["banana","mango","grapes","orange"])
-    ll.print_forward()
-    ll.print_backward()
-    ll.insert_at_end("figs")
-    ll.print_forward()
-    ll.insert_at(0,"jackfruit")
-    ll.print_forward()
-    ll.insert_at(6,"dates")
-    ll.print_forward()
-    ll.insert_at(2,"kiwi")
-    ll.print_forward()
+# Display the hash table
+hash_table.display()
