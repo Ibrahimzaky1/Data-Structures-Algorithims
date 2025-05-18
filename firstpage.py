@@ -1,134 +1,149 @@
-##################################### LESSON 18 #####################################
-def shell_sort(arr):
-    size = len(arr)
-    gap = size // 2
-    while gap > 0:
-        for i in range(gap,size):
-            anchor = arr[i]
-            j = i
-            while j>=gap and arr[j-gap] > anchor:
-                arr[j] = arr[j-gap]
-                j -= gap
-
-            arr[j] = anchor
-        gap = gap // 2
+##################################### LESSON 20 ##################################### 
+def fib(n):
+    if n==0 or n==1:
+        return n
+    return fib(n-1) + fib(n-2)
 
 
 
-if __name__ == '__main__':
-    elements = [21,36,29,17,4,25,11,32,9]
-    shell_sort(elements)
-    print(elements)
+if __name__=='__main__':
+    print(fib(4))
+
+
+##################################### EXCERCISE 1 #####################################
+
+
+def list_sum(num_List):
+    if len(num_List) == 1:
+        return num_List[0]
+    else:
+        return num_List[0] + list_sum(num_List[1:])
+
+print(list_sum([2, 4, 5, 6, 7]))
+
+
+##################################### EXCERCISE 2 #####################################
+
+def to_string(n, base):
+    conver_tString = "0123456789ABCDEF"
+    if n < base:
+        return conver_tString[n]
+    else:
+        return to_string(n // base, base) + conver_tString[n % base]
+
+print(to_string(2835, 16))
+
+
+##################################### EXCERCISE 3 #####################################
+
+
+def recursive_list_sum(data_list):
+    total = 0
+    for element in data_list:
+        if type(element) == type([]):
+            total = total + recursive_list_sum(element)
+        else:
+            total = total + element
+
+    return total
+
+print(recursive_list_sum([1, 2, [3, 4], [5, 6]]))
+
+##################################### EXCERCISE 4 #####################################
+
+
+def factorial(n):
+    if n <= 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+print(factorial(5))
+
+##################################### EXCERCISE 5 #####################################
+
+def fibonacci(n):
+    if n == 1 or n == 2:
+        return 1
+    else:
+        return fibonacci(n - 1) + fibonacci(n - 2)
+print(fibonacci(7))
+
+
+##################################### EXCERCISE 6 #####################################
+
+
+def sumDigits(n):
+    if n == 0:
+        return 0
+    else:
+        return n % 10 + sumDigits(int(n / 10))
+print(sumDigits(345))
+print(sumDigits(45))
 
 
 
+##################################### EXCERCISE 7 #####################################
+
+
+def sum_series(n):
+    if n < 1:
+        return 0
+    else:
+        return n + sum_series(n - 2)
+print(sum_series(6))
+print(sum_series(10))
+
+
+##################################### EXCERCISE 8 #####################################
 
 
 
-def shell_sort(arr):
-    n = len(arr)
-    div = 2
-    gap = n//div
-    while gap > 0:
-        index_to_delete = []
-        for i in range(gap, n):
-            temp = arr[i]
-            j = i
-            while j >= gap and arr[j-gap] >= temp:
-                if arr[j-gap] == temp:
-                    index_to_delete.append(j)
-                arr[j] = arr[j-gap]
-                j -= gap
-            arr[j] = temp
-        index_to_delete=list(set(index_to_delete))
-        index_to_delete.sort()
-        if index_to_delete:
-            for i in index_to_delete[-1::-1]:
-                del arr[i]
-        div *= 2
-        n = len(arr)
-        gap = n//div
+def harmonic_sum(n):
+    if n < 2:
+        return 1
+    else:
+        return 1 / n + harmonic_sum(n - 1)
+print(harmonic_sum(7))
+print(harmonic_sum(4))
 
 
-if __name__ == '__main__':
-    elements = [2, 1, 5, 7, 2, 0, 5, 1, 2, 9,  5, 8, 3]
-
-    print(f'Given unsorted list: {elements}')
-    shell_sort(elements)
-    print(f'List after Sorting : {elements}')
+##################################### EXCERCISE 9 #####################################
 
 
-
-##################################### LESSON 19 ##################################### 
-
-def find_min_element(arr):
-    min = 100000000
-    for i in range(len(arr)):
-        if arr[i] < min:
-            min = arr[i]
-        return min
+def geometric_sum(n):
+    if n == 0:
+        return 1
+    else:
+        return 1 / (pow(2, n)) + geometric_sum(n - 1)
+print(geometric_sum(7))
+print(geometric_sum(4))
 
 
-if __name__ == '__main__':
-    elements = [78,12,15,8,61,53,23,27]
-    print(find_min_element(elements))
+##################################### EXCERCISE 10 #####################################
+
+
+def power(a, b):
+    if b == 0:
+        return 1
+    elif a == 0:
+        return 0
+    elif b == 1:
+        return a
+    else:
+        return a * power(a, b - 1)
+print(power(3, 4))
 
 
 
-def selection_sort(arr):
-    size = len(arr)
-    for i in range(size-1):
-        min_index = i
-        for j in range(min_index+1, size):
-            if arr[j] < arr[min_index]:
-                min_index = j
-        if i != min_index:
-            arr[i], arr[min_index] = arr[min_index], arr[i]
+##################################### EXCERCISE 11 #####################################
 
-
-
-
-if __name__ == '__main__':
-    elements = [78,12,15,8,61,53,23,27]
-    selection_sort(elements)
-    print(elements)
-
-
-
-
-
-
-
-def multilevel_selection_sort(elements, sort_by_list):
-    for sort_by in sort_by_list[-1::-1]:
-        for x in range(len(elements)):
-            min_index = x
-            for y in range(x, len(elements)):
-                if elements[y][sort_by] < elements[min_index][sort_by]:
-                    min_index = y
-            if x != min_index:
-                elements[x], elements[min_index] = elements[min_index], elements[x]
-
-
-if __name__ == '__main__':
-    elements = [
-        {'First Name': 'Raj', 'Last Name': 'Nayyar'},
-        {'First Name': 'Suraj', 'Last Name': 'Sharma'},
-        {'First Name': 'Karan', 'Last Name': 'Kumar'},
-        {'First Name': 'Jade', 'Last Name': 'Canary'},
-        {'First Name': 'Raj', 'Last Name': 'Thakur'},
-        {'First Name': 'Raj', 'Last Name': 'Sharma'},
-        {'First Name': 'Kiran', 'Last Name': 'Kamla'},
-        {'First Name': 'Armaan', 'Last Name': 'Kumar'},
-        {'First Name': 'Jaya', 'Last Name': 'Sharma'},
-        {'First Name': 'Ingrid', 'Last Name': 'Galore'},
-        {'First Name': 'Jaya', 'Last Name': 'Seth'},
-        {'First Name': 'Armaan', 'Last Name': 'Dadra'},
-        {'First Name': 'Ingrid', 'Last Name': 'Maverick'},
-        {'First Name': 'Aahana', 'Last Name': 'Arora'}
-    ]
-
-    print(f'Given unsorted array:', *elements, sep='\n')
-    multilevel_selection_sort(
-        elements, ['First Name', 'Last Name'])
-    print(f'Array after Multi-Level Sorting:', *elements, sep='\n')
+def Recurgcd(a, b):
+    low = min(a, b)
+    high = max(a, b)
+    if low == 0:
+        return high
+    elif low == 1:
+        return 1
+    else:
+        return Recurgcd(low, high % low)
+print(Recurgcd(12, 14))
