@@ -1,94 +1,50 @@
-class singlyNode:  # ❌ You wrote ".class", which is invalid
-    def __init__(self, val, next=None):
-        self.val = val  # ❌ You forgot to assign self.val
-        self.next = next
 
-    def __str__(self):
-        return str(self.val)
 
-# Creating nodes
-Head = singlyNode(1)
-A = singlyNode(3)
-B = singlyNode(4)
-C = singlyNode(7)
+####################### Lesson 7 #######################
 
-# Linking nodes
-Head.next = A
-A.next = B
-B.next = C
 
-# Print head value
-print(Head)
+A = [-3, -1, 0, 1, 4, 7]
 
-# Traverse and print each node
-curr = Head
-while curr:
-    print(curr)
-    curr = curr.next
+if -1 in A:
+    print(True)
 
-# Display function
-def display(Head):
-    curr = Head
-    elements = []
-    while curr:
-        elements.append(str(curr.val))
-        curr = curr.next
-    print(' -> '.join(elements))
+def binary_seaarch(arr, target):
 
-display(Head)
+    N = len(A)
+    L = 0
+    R = N -1
 
-# ❌ You forgot the colon (:) in the function definition
-def search(Head, val):
-    curr = Head
-    while curr:
-        if val == curr.val:
+    while L <= R:
+        M = L + ((R-L) // 2)
+
+        if arr[M] == target:
             return True
-        curr = curr.next
-    return False
-
-# Call and print the result of search
-print(search(Head, 2))  # This will print False
-
-
-
-class DoublyNodes:
-    def __init__(self, val, next=None, prev=None):
-        self.val = val
-        self.next = next
-        self.prev = prev
-
-    def __str__(self):
-        return str(self.val)
+        elif target < arr[M]:
+            R = M - 1
+        else:
+            L = M + 1
+    
     
 
-head = tail = DoublyNodes(1)
-print(tail)
+    return False
 
-def display(head):
-    curr = head
-    elements = []
-    while curr:
-        elements.append(str(curr.val))
-        curr = curr.next
-    print(' <-> '.join(elements))
+binary_seaarch(A, 0)
 
-display(head)
+B = [False, False, False, False, True, True, True]
 
-def insert_at_beginnig(head, tail, val):
-    new_node = DoublyNodes(val, next=head)
-    head.prev = new_node
-    return new_node, tail
+def binary_search_condition(arr):
+    N = len(arr)
+    L = 0
+    R = N -1
 
-head, tail = insert_at_beginnig(head, tail, 3)
-display(head)
+    while L < R:
+        M = (L + R) // 2
 
-def insert_at_end(head, tail, val):
-    new_node = DoublyNodes(val, prev=tail)
-    tail.next = new_node
-    return head, new_node
+        if B[M]:
+            R = M
+        else:
+            L = M + 1
 
-head, tail = insert_at_end(head, tail, 7)
-display(head)
-
-####################### Lesson 4 #######################
-
+        return L
+    
+binary_search_condition(B)
