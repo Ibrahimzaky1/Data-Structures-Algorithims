@@ -1,322 +1,166 @@
+A = [[0, 1], [1, 2], [0, 3], [3, 4], [3, 6], [3, 7], [4, 2], [4, 5], [5, 2]]
 
+# Find the number of nodes
+n = max(max(u, v) for u, v in A) + 1
 
-####################### Lesson 7 #######################
-
-
-A = [-3, -1, 0, 1, 4, 7]
-
-if -1 in A:
-    print(True)
-
-def binary_seaarch(arr, target):
-
-    N = len(A)
-    L = 0
-    R = N -1
-
-    while L <= R:
-        M = L + ((R-L) // 2)
-
-        if arr[M] == target:
-            return True
-        elif target < arr[M]:
-            R = M - 1
-        else:
-            L = M + 1
-    
-    
-
-    return False
-
-binary_seaarch(A, 0)
-
-B = [False, False, False, False, True, True, True]
-
-def binary_search_condition(arr):
-    N = len(arr)
-    L = 0
-    R = N -1
-
-    while L < R:
-        M = (L + R) // 2
-
-        if B[M]:
-            R = M
-        else:
-            L = M + 1
-
-        return L
-    
-binary_search_condition(B)
-
-
-####################### Lesson 7 #######################
-
-class TreeNode:
-    def __init__(self, val, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right 
-
-    def __str__(self):
-        return str(self.val)
-    
-
-A = TreeNode(1)
-B = TreeNode(2)
-C = TreeNode(3)
-D = TreeNode(4)
-E = TreeNode(5)
-F = TreeNode(10)
-
-A.left = B
-A.right = C
-B.left = D
-B.right = E
-C.left = F
-
-print(A)
-
-def pre_order(node):
-    if not node:
-        return
-    print(node)
-    pre_order(node.left)
-    pre_order(node.right)
-
-pre_order(A)
-
-
-def in_order(node):
-    if not node:
-        return
-    in_order(node.left)
-    print(node)
-    in_order(node.right)
-
-in_order(A)
-
-
-def pre_order_iterative(node):
-    stk = [node]
-
-    while stk:
-        node = stk.pop()
-        print(node)
-        if node.right: stk.append(node.right)
-        if node.left: stk.append(node.left)
-
-    pre_order_iterative(A)
-
-
-
-
-########################## Lesson 9 ##########################
-
-A = [-4, 3, 1, 0, 2, 5, 10, 8, 12, 9]
-
-import heapq
-heapq.heapify(A)
-
-A
-
-heapq.heappush(A, 4)
-
-A
-
-minn = heapq.heappop(A)
-
-A, minn
-
-def heapsort(arr):
-    heapq.heapify(arr)
-    n = len(arr)
-    new_list = [0] * n
-
-    for i in range(n):
-        minn = heapq.heappop(arr)
-        new_list[i] = minn
-
-    return new_list
-
-heapsort([1, 3, 5, 7, 9, 2, 4, 6, 8, 0])
-
-heapq.heappushpop(A, 99)
-
-print(A)
-
-
-B = [-4, 3, 1, 0, 2, 5, 10, 8, 12, 9]
-n = len(B)
-
+# Initialize n x n matrix with 0s
+M = []
 for i in range(n):
-    B[i] = -B[i]
+    M.append([0] * n)
 
-heapq.heapify(B)
+# Fill adjacency matrix
+for u, v in A:
+    M[u][v] = 1
 
-print(B)
+# Output
+print("Adjacency list:", A)
+print("Adjacency matrix:")
+for row in M:
+    print(row)
 
-largest = heapq.heappop(B)
+from collections import defaultdict
 
-print(largest)
+D = defaultdict(list)
 
-heapq.heappush(B, -7)
-
-print(B)
-
-C = [-5, 4, 2, 1, 7, 0, 3]
-
-heap = []
-
-for x in C:
-    heapq.heappush(heap, x)
-    print(heap, len(heap))
+for  u, v in A:
+    D[u].append(v)
 
 
-print(C)
+def dfs_recursive(node):
+    print(node)
+    for nei_node in D[node]:
+        if nei_node not in seen:
+            seen.add(nei_node)
+            dfs_recursive(nei_node)
+
+print(D)
+
+source = 0 
+
+seen = set()
+seen.add(source)
+dfs_recursive(source)
 
 
-D = [5, 4, 3, 5, 4, 3, 5, 5, 4]
+source = 0 
 
-from collections import Counter
+seen = set()
+seen.add(source)
+stack = [source]
 
-Counter = Counter(D)
-
-print(Counter)
-
-heap = []
-
-for k, v in Counter.items():
-    heapq.heappush(heap, (k, v))
-
-print(heap)
+while stack:
+    node = stack.pop()
+    print(node)
+    for nei_node in D[node]:
+        if nei_node not in seen:
+            seen.add(nei_node)
+            stack.append(nei_node)
 
 
-########################## Lesson 10 ##########################
+source = 0
 
-#Bubble_sort
+from collections import deque
 
-A = [-5, 3, 2, 1, -3, -3, 7, 2, 2]
+seen = set()
+seen.add(source)
+q = deque()
+q.append(source)
 
-def bubble_sort(arr):
-    n = len(arr)
-    flag = True
-    while flag:
-        flag = False
-        for i in range(1, n):
-            if arr [i-1] > arr[i]:
-                flag = True
-                arr[i-1], arr[i] = arr[i], arr[i-1]
+while q:
+    node = q.popleft()
+    print(node)
+    for nei_node in D[node]:
+        if nei_node not in seen:
+            seen.add(nei_node)
+            stack.append(nei_node)
 
-bubble_sort(A)
-print(A)
 
-#insertion Sort
 
-B = [-5, 3, 2, 1, -3, -3, 7, 2, 2]
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.neighbors = []
+        
+    def __str__(self):
+        return f'Node({self.value})'
+    def display(self):
+        connections = [node.value for node in self.neighbors]
+        return f'{self.value} is connected to: {connections}'
+    
+A = Node('A')
+B = Node('B')
+C = Node('C')
+D = Node('D')
 
-def insertion_sort(arr):
-    n = len(arr)
-    for i in range(1, n):
-        for j in range(i, 0, -1):
-            if arr[j-1] > arr [j]:
-                arr[j-1], arr[j] = arr[j], arr[j-1]
+A.neighbors.append(B)
+B.neighbors.append(A)
+
+C.neighbors.append(D)
+D.neighbors.append(C)
+
+A.display()
+
+from typing import List
+
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        left = 0
+        right = len(nums) - 1
+        result = []
+
+        while left <= right:
+            if abs(nums[left]) > abs(nums[right]):
+                result.append(nums[left] ** 2)
+                left += 1
             else:
-                break
+                result.append(nums[right] ** 2)
+                right -= 1
 
-insertion_sort(B)
-print(B)
-
-# selection Sort
-
-C = [-5, 3, 2, 1, -3, -3, 7, 2, 2]
-
-def selection_sort(arr):
-    n = len(arr)
-    for i in range(n):
-        min_index = i
-        for j in range(i+1, n):
-            if arr[j] < arr[min_index]:
-                min_index = j
-                arr[i], arr[min_index] = arr[min_index], arr[i]
-
-selection_sort(C)
-print(C)
-
-#Merge Sort
-
-D = [-5, 3, 2, 1, -3, -3, 7, 2, 2]
-
-def merge_sort(arr):
-    n = len(arr)
-    if n == 1:
-        return arr
-    
-    m = n // 2
-    L = merge_sort(arr[:m])
-    R = merge_sort(arr[m:])
-    
-    l, r = 0, 0
-    sorted_arr = []
-
-    while l < len(L) and r < len(R):
-        if L[l] < R[r]:
-            sorted_arr.append(L[l])
-            l += 1
-        else:
-            sorted_arr.append(R[r])
-            r += 1
-
-    # Append remaining elements
-    while l < len(L):
-        sorted_arr.append(L[l])
-        l += 1
-
-    while r < len(R):
-        sorted_arr.append(R[r])
-        r += 1
-
-    return sorted_arr
-
-print(merge_sort(D))
-
-# Quick Sort
-
-E = [-5, 3, 2, 1, -3, -3, 7, 2, 2]
+        result.reverse()
+        return result
 
 
-def quick_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    p = arr[-1]
 
-    L = [x for x in arr[:-1] if x <= p]
-    R = [x for x in arr[:-1] if x > p]
 
-    L = quick_sort(L)
-    R = quick_sort(R)
+####################### LESSON 13 ########################
 
-    return L + [p] + R
+#Sliding Window
 
-quick_sort(E)
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        l = 0
+        longest = 0
+        sett = set()
+        n = len(s)
 
-# Counting Sort
+        for r in range(n):
+            while s[r] in sett:
+                sett.remove(s[l])
+                l += 1
 
-def counting_sort(arr):
-    if not arr:
-        return
+            sett.add(s[r])
+            w = r - l + 1
+            longest = max(longest, w)
 
-    maxx = max(arr)
-    counts = [0] * (maxx + 1)
+        return longest
 
-    for x in arr:
-        counts[x] += 1
 
-    i = 0
-    for c in range(len(counts)):
-        while counts[c] > 0:
-            arr[i] = c
-            i += 1
-            counts[c] -= 1
+class Solution:
+    def findMaxAverage(self, nums: List[int], k: int) -> float:
+        n = len(nums)
+        cur_sum = 0
+
+        for i in range(k):
+            cur_sum += nums[1]
+
+        max_avg = cur_sum / k
+        for i in range(k, n):
+            cur_sum += nums[i]
+            cur_sum -= nums[i-k]
+
+            avg = cur_sum / k
+            max_avg = max(max_avg. avg)
+
+        return max_avg
 
 
