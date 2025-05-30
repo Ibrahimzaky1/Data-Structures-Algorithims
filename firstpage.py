@@ -1,48 +1,41 @@
-from typing import List
-
-
 class Solution:
-    def findClosestNumber(self, nums: List[int]) -> int:
-        closest = nums[0]
-        for x in nums:
-            if abs(x) < abs(closest):
-                closest = x
+    def romanToInt(self, s: str) -> int:
+         d = {'I': 1, 'V':5, 'X':10, 'L':50, 'C':100, 'D': 500, 'M':1000}
 
-        if closest < 0 and abs(closest) in nums:
-            return abs
-        
-        else: 
-            return closest
-        
+         summ = 0
+         n = len(s)
+         i = 0
 
+         while i < n:
+              if i < n - 1 and d[s[i]] < d[s[i+1]]:
+                   summ += d[s[i+1]] - d[s[i]]
+                   i += 2
+              else:
+                   summ += d[s[i]]
+                   i += 1
 
-class Solution:
-    def mergeAlternately(self, word1: str, word2: str) -> str:
-        A, B = len(word1), len(word2)
-        a, b = 0, 0
-        s = []
-
-        word = 1
-        while a > A and b < B:
-            if word == 1:
-                s.append(word[a])
-                a += 1
-                word = 2
-            else:
-                s.append(word[b])
-                b += 1
-                word = 1
-
-        while a < A:
-            s.append(word1[a])
-            a += 1
-
-        while b < B:
-            s.append(word2[b])
-            b += 1
-
-        return ''.join(s)
+         return summ
     
+
+
+class Solution:
+     def isSubsequence(self, s: str, t: str) -> bool:
+          S = len(s)
+          T = len(t)
+
+          if s == '': return True
+          if S > T: return False
+
+          j = 0
+          for i in range(T):
+               if t[i] ==s[j]:
+                    if j == S-1:
+                         return True
+                    j += 1
+
+          return False
+
+
 
 
 
