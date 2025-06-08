@@ -78,3 +78,137 @@ matrix = [
     [7, 8, 9]
 ]
 print(sol.spiralOrder(matrix))                 
+
+
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        min_price = float('inf')
+        max_profit = 0
+
+        for price in prices:
+            if price < min_price:
+                min_price = price
+
+            profit = price - min_price
+
+            if profit > max_profit:
+                max_profit = profit
+
+        return max_profit
+
+
+        
+
+
+
+from typing import List
+
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        n = len(matrix)
+
+        # Transpose
+        for i in range(n):
+            for j in range(i + 1, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+        # Reverse each row
+        for i in range(n):
+            for j in range(n // 2):
+                matrix[i][j], matrix[i][n - j - 1] = matrix[i][n - j - 1], matrix[i][j]
+
+# Example usage:
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+sol = Solution()
+sol.rotate(matrix)
+
+# Now print the result
+print(matrix)
+
+
+
+
+
+class Solution:
+    def numJewelsInStones(self, jewels: str, stones: str) -> int:
+        count = 0
+        for stone in stones:
+            if stone in jewels:
+                count += 1
+        return count
+
+jewels = "aA"
+stones = "aAAbbbb"
+
+sol = Solution()
+result = sol.numJewelsInStones(jewels, stones)
+print(result)
+
+
+
+from collections import Counter
+
+class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        counter = {}
+        for c in magazine:
+            if c in counter:
+                counter[c] += 1
+            else:
+                counter[c] = 1
+
+        for c in ransomNote:
+            if c not in counter:
+                return False
+            elif counter[c] == 1:
+                del counter[c]
+            else:
+                counter[c] -= 1
+
+        return True
+
+            
+sol = Solution()
+print(sol.canConstruct("aab", "baa"))   # Output: True
+print(sol.canConstruct("aab", "ab"))    # Output: False
+
+
+
+
+
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        h = set()
+        for num in nums:
+            if num in h:
+                return True
+            else:
+                h.add(num)
+
+        return False
+    
+    
+sol = Solution()
+print(sol.containsDuplicate([1, 2, 3, 4]))    # False
+print(sol.containsDuplicate([1, 2, 3, 1]))    # True
+
+
+from collections import Counter
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        s_dict = Counter(s)
+        t_dict = Counter(t)
+
+        return s_dict == t_dict
+    
+    
+print(sol.isAnagram("listen", "silent"))  # True
+print(sol.isAnagram("hello", "world")) #False
