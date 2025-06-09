@@ -13,7 +13,7 @@ class Solution:
 
         return merged
 
-# Example usage
+
 s = Solution()
 intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]
 result = s.merge(intervals)
@@ -118,7 +118,7 @@ class Solution:
             for j in range(n // 2):
                 matrix[i][j], matrix[i][n - j - 1] = matrix[i][n - j - 1], matrix[i][j]
 
-# Example usage:
+
 matrix = [
     [1, 2, 3],
     [4, 5, 6],
@@ -128,7 +128,7 @@ matrix = [
 sol = Solution()
 sol.rotate(matrix)
 
-# Now print the result
+
 print(matrix)
 
 
@@ -199,16 +199,214 @@ print(sol.containsDuplicate([1, 2, 3, 4]))    # False
 print(sol.containsDuplicate([1, 2, 3, 1]))    # True
 
 
+
+
+
+
 from collections import Counter
+
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         if len(s) != len(t):
             return False
         s_dict = Counter(s)
         t_dict = Counter(t)
-
         return s_dict == t_dict
+
+
+sol = Solution()
+print(sol.isAnagram("listen", "silent"))  # Output: True
+
+
+
+
+
+from typing import List
+from collections import defaultdict
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        anagrams_dict = defaultdict(list)
+        for s in strs:
+            count = [0] * 26
+            for c in s:
+                count[ord(c) - ord('a')] += 1
+
+            key = tuple(count)
+            anagrams_dict[key].append(s)
+
+        return list(anagrams_dict.values())
+
+
+sol = Solution()
+print(sol.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
+
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        # Check rows
+        for i in range(9):
+            s = set()
+            for j in range(9):
+                item = board[i][j]
+                if item in s:
+                    return False
+                elif item != '.':
+                    s.add(item)
+
+        # Check columns
+        for i in range(9):
+            s = set()
+            for j in range(9):
+                item = board[j][i]
+                if item in s:
+                    return False
+                elif item != '.':
+                    s.add(item)
+
+        # Check 3x3 sub-boxes
+        starts = [(0, 0), (0, 3), (0, 6),
+                  (3, 0), (3, 3), (3, 6),
+                  (6, 0), (6, 3), (6, 6)]
+        
+        for i, j in starts:
+            s = set()
+            for row in range(i, i + 3):
+                for col in range(j, j + 3):
+                    item = board[row][col]
+                    if item in s:
+                        return False
+                    elif item != '.':
+                        s.add(item)
+
+        return True
+board = [
+    ["5","3",".",".","7",".",".",".","."],
+    ["6",".",".","1","9","5",".",".","."],
+    [".","9","8",".",".",".",".","6","."],
+    ["8",".",".",".","6",".",".",".","3"],
+    ["4",".",".","8",".","3",".",".","1"],
+    ["7",".",".",".","2",".",".",".","6"],
+    [".","6",".",".",".",".","2","8","."],
+    [".",".",".","4","1","9",".",".","5"],
+    [".",".",".",".","8",".",".","7","9"]
+]
+
+sol = Solution()
+print(sol.isValidSudoku(board))  # Output: True
+
+
+
+from collections import defaultdict
+
+class Solution:
+    def maxNumberOfBalloons(self, text: str) -> int:
+        counter = defaultdict(int)
+        for c in text:
+            if c in 'balloon':
+                counter[c] += 1
+
+        return min(
+            counter['b'],
+            counter['a'],
+            counter['l'] // 2,
+            counter['o'] // 2,
+            counter['n']
+        )
+
+
+s = Solution()
+print(s.maxNumberOfBalloons("loonbalxballpoon"))  # Output: 2
+
+
+
+
+
+
+
+
+from typing import List
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        s = set(nums)
+        longest = 0
+
+        for num in s:
+            if num - 1 not in s:
+                length = 1
+                next_num = num + 1
+                while next_num in s:
+                    length += 1
+                    next_num += 1
+                longest = max(longest, length)
+
+        return longest
+
+
+s = Solution()
+print(s.longestConsecutive([100, 4, 200, 1, 3, 2]))  # Output: 4 (sequence: 1, 2, 3, 4)
+
+
+
+
+
+from typing import List
+
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        counter = {}
+        for num in nums:
+            if num in counter:
+                counter[num] += 1
+            else:
+                counter[num] = 1
+
+        max_count = -1
+        ans = -1
+
+        for key, val in counter.items():
+            if val > max_count:
+                max_count = val
+                ans = key
+
+        return ans
+
+
+s = Solution()
+print(s.majorityElement([3, 2, 3]))  # Output: 3
+print(s.majorityElement([2, 2, 1, 1, 1, 2, 2]))  # Output: 2
+
+
+
+
+
+
     
+
+from typing import List
+
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        ans = -1
+        count = 0
+
+        for num in nums:
+            if count == 0:
+                ans = num
+
+            if ans == num:
+                count += 1
+            else:
+                count -= 1
+
+        return ans
+
+
+s = Solution()
+print(s.majorityElement([3, 2, 3]))  # Output: 3
+print(s.majorityElement([2, 2, 1, 1, 1, 2, 2]))  # Output: 2
+
+
     
-print(sol.isAnagram("listen", "silent"))  # True
-print(sol.isAnagram("hello", "world")) #False
+
+
