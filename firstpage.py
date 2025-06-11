@@ -1,88 +1,3 @@
-  from typing import List
-
-class Solution:
-    def majorityElement(self, nums: List[int]) -> int:
-        ans = -1
-        count = 0
-
-        for num in nums:
-            if count == 0:
-                ans = num
-
-            if ans == num:
-                count += 1
-            else:
-                count -= 1
-
-        return ans
-
-
-s = Solution()
-print(s.majorityElement([3, 2, 3]))  # Output: 3
-print(s.majorityElement([2, 2, 1, 1, 1, 2, 2]))  # Output: 2
-
-
-    
-
-
-
-
-
-class Solution:
-    def isValid(self, s: str) -> bool:
-        hashmap = {')':'(', '}':'{', ']':'['}
-        stk = []
-
-        for c in s:
-            if c not in hashmap:
-                stk.append(c)
-            else:
-                if not stk:
-                    return False
-                else:
-                    popped = stk.pop()
-                    if popped != hashmap[c]:
-                        return False
-        return not stk
-    
-
-s = Solution()
-print(s.isValid("()"))         
-print(s.isValid("()[]{}"))     
-print(s.isValid("(]"))         
-print(s.isValid("([)]"))       
-print(s.isValid("{[]}")) 
-
-
-from typing import List
-
-class Solution:
-    def dailyTemperatures(self, temperature: List[int]) -> List[int]:
-        n = len(temperature)
-        answer = [0] * n
-        stk = []  # (temp, index)
-
-        for i, t in enumerate(temperature):
-            while stk and stk[-1][0] < t:
-                stk_t, stk_i = stk.pop()
-                answer[stk_i] = i - stk_i
-            stk.append((t, i))
-
-        return answer
-
-# Example usage
-s = Solution()
-print(s.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))  
-# Output: [1, 1, 4, 2, 1, 1, 0, 0]
-
-
-
-
-
-
-
-
-
 
 
 from typing import List
@@ -116,3 +31,123 @@ print(s.evalRPN(["4", "13", "5", "/", "+"]))  # Output: 6
 print(s.evalRPN(["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]))  # Output: 22
 
 
+class MinStack:
+    def __init__(self):
+        self.stk = []
+        self.min_stk = []
+
+    def push(self, val: int) -> None:
+        self.stk.append(val)
+        if not self.min_stk:
+            self.min_stk.append(val)
+        elif self.min_stk[-1] < val:
+            self.min_stk.append(self.min_stk[-1])
+        else:
+            self.min_stk.append(val)
+
+    def pop(self) -> None:
+        self.stk.pop()
+        self.min_stk.pop()
+
+    def top(self) -> int:
+        return self.stk[-1]
+
+    def getMin(self) -> int:
+        return self.min_stk[-1]
+    
+
+minStack = MinStack()
+minStack.push(-2)
+minStack.push(0)
+minStack.push(-3)
+print(minStack.getMin())  # Output: -3
+minStack.pop()
+print(minStack.top())     # Output: 0
+print(minStack.getMin())  # Output: -2
+
+
+
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left = 0
+        right = len(nums) - 1
+
+        while left <= right:
+            middle = (right + left) // 2
+
+            if nums[middle] == target:
+                return middle
+            elif nums[middle] > target:
+                right = middle - 1
+
+            else:
+                left = middle + 1
+
+        return -1
+    
+s = Solution()
+print(s.search([-1, 0, 3, 5, 9, 12], 9))   
+print(s.search([-1, 0, 3, 5, 9, 12], 2))
+
+
+from typing import List
+
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        l = 0
+        r = len(nums) - 1
+
+        while l <= r:
+            m = (l + r) // 2
+
+            if nums[m] < target:
+                l = m + 1
+            elif nums[m] > target:
+                r = m - 1
+            else:
+                return m
+
+        return l  
+    
+s = Solution()
+print(s.searchInsert([1,3,5,6], 5))  # Output: 2
+print(s.searchInsert([1,3,5,6], 2))  # Output: 1
+print(s.searchInsert([1,3,5,6], 7))  # Output: 4
+print(s.searchInsert([1,3,5,6], 0))  # Output: 0
+
+
+from typing import List
+
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        rows = len(matrix)
+        cols = len(matrix[0])
+        left = 0
+        right = rows * cols - 1
+
+        while left <= right:
+            mid = (left + right) // 2
+            i = mid // cols
+            j = mid % cols
+            mid_val = matrix[i][j]
+
+            if mid_val == target:
+                return True
+            elif target < mid_val:
+                right = mid - 1
+            else:
+                left = mid + 1
+
+        return False
+
+
+s = Solution()
+matrix = [
+    [1, 3, 5, 7],
+    [10, 11, 16, 20],
+    [23, 30, 34, 60]
+]
+
+print(s.searchMatrix(matrix, 3))    # True
+print(s.searchMatrix(matrix, 13))   # False
