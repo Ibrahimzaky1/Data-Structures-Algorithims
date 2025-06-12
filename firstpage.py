@@ -1,122 +1,3 @@
-
-
-from typing import List
-import math
-
-class Solution:
-    def evalRPN(self, tokens: List[str]) -> int:
-        stk = []
-        for t in tokens:
-            if t in '+-*/':
-                b, a = stk.pop(), stk.pop()
-
-                if t == '+':
-                    stk.append(a + b)
-                elif t == '-':
-                    stk.append(a - b)
-                elif t == '*':
-                    stk.append(a * b)
-                else:  # division with truncation toward zero
-                    stk.append(int(a / b))
-
-            else:
-                stk.append(int(t))  # convert token to int
-
-        return stk[0]
-
-# Example usage
-s = Solution()
-print(s.evalRPN(["2", "1", "+", "3", "*"]))  # Output: 9
-print(s.evalRPN(["4", "13", "5", "/", "+"]))  # Output: 6
-print(s.evalRPN(["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]))  # Output: 22
-
-
-class MinStack:
-    def __init__(self):
-        self.stk = []
-        self.min_stk = []
-
-    def push(self, val: int) -> None:
-        self.stk.append(val)
-        if not self.min_stk:
-            self.min_stk.append(val)
-        elif self.min_stk[-1] < val:
-            self.min_stk.append(self.min_stk[-1])
-        else:
-            self.min_stk.append(val)
-
-    def pop(self) -> None:
-        self.stk.pop()
-        self.min_stk.pop()
-
-    def top(self) -> int:
-        return self.stk[-1]
-
-    def getMin(self) -> int:
-        return self.min_stk[-1]
-    
-
-minStack = MinStack()
-minStack.push(-2)
-minStack.push(0)
-minStack.push(-3)
-print(minStack.getMin())  # Output: -3
-minStack.pop()
-print(minStack.top())     # Output: 0
-print(minStack.getMin())  # Output: -2
-
-
-
-
-class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        left = 0
-        right = len(nums) - 1
-
-        while left <= right:
-            middle = (right + left) // 2
-
-            if nums[middle] == target:
-                return middle
-            elif nums[middle] > target:
-                right = middle - 1
-
-            else:
-                left = middle + 1
-
-        return -1
-    
-s = Solution()
-print(s.search([-1, 0, 3, 5, 9, 12], 9))   
-print(s.search([-1, 0, 3, 5, 9, 12], 2))
-
-
-from typing import List
-
-class Solution:
-    def searchInsert(self, nums: List[int], target: int) -> int:
-        l = 0
-        r = len(nums) - 1
-
-        while l <= r:
-            m = (l + r) // 2
-
-            if nums[m] < target:
-                l = m + 1
-            elif nums[m] > target:
-                r = m - 1
-            else:
-                return m
-
-        return l  
-    
-s = Solution()
-print(s.searchInsert([1,3,5,6], 5))  # Output: 2
-print(s.searchInsert([1,3,5,6], 2))  # Output: 1
-print(s.searchInsert([1,3,5,6], 7))  # Output: 4
-print(s.searchInsert([1,3,5,6], 0))  # Output: 0
-
-
 from typing import List
 
 class Solution:
@@ -151,3 +32,147 @@ matrix = [
 
 print(s.searchMatrix(matrix, 3))    # True
 print(s.searchMatrix(matrix, 13))   # False
+
+
+
+
+from typing import List
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        n = len(nums)
+        l = 0
+        r = n - 1
+
+        while l < r:
+            m = (l + r) // 2
+
+            if nums[m] > nums[r]:
+                l = m + 1
+            else:
+                r = m
+
+        return nums[l]
+
+s = Solution()
+print(s.findMin([3, 4, 5, 1, 2]))   # 1
+print(s.findMin([4, 5, 6, 7, 0, 1, 2]))  # 0
+print(s.findMin([11, 13, 15, 17]))  # 11
+
+
+
+
+
+from typing import List
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        l = 0
+        r = n - 1
+
+        
+        while l < r:
+            m = (l + r) // 2
+            if nums[m] > nums[r]:
+                l = m + 1
+            else:
+                r = m
+
+        min_i = l
+
+        
+        if target >= nums[0] and target <= nums[min_i - 1]:
+            l, r = 0, min_i - 1
+        else:
+            l, r = min_i, n - 1
+
+        
+        while l <= r:
+            m = (l + r) // 2
+            if nums[m] == target:
+                return m
+            elif nums[m] < target:
+                l = m + 1
+            else:
+                r = m - 1
+
+        return -1
+
+
+s = Solution()
+print(s.search([4,5,6,7,0,1,2], 0))  # Output: 4
+print(s.search([4,5,6,7,0,1,2], 3))  # Output: -1
+print(s.search([1], 0))             # Output: -1
+print(s.search([1, 3], 3))          # Output: 1
+
+
+class Solution:
+    def firstBadVersion(self, n: int) -> int:
+        L = 1
+        R = n
+
+        while L < R:
+            M = (L+R) // 2
+            if isBadVersion(m):
+                R = M
+            else:
+                L = M + 1
+
+        return L
+
+
+
+
+
+def isBadVersion(version: int) -> bool:
+    return version >= 4  
+
+class Solution:
+    def firstBadVersion(self, n: int) -> int:
+        L = 1
+        R = n
+
+        while L < R:
+            M = (L + R) // 2
+            if isBadVersion(M):  
+                R = M
+            else:
+                L = M + 1
+
+        return L
+
+
+s = Solution()
+print(s.firstBadVersion(5))  # Output: 4 (since version 4 is the first bad one)
+
+
+
+
+
+class Solution:
+    def isPerfectSquare(self, num: int) -> bool:
+        l = 1
+        r = num
+
+        while l <= r:
+            m = (l + r) // 2
+            m_squared = m * m
+
+            if num == m_squared:
+                return True
+            elif m_squared < num:
+                l = m + 1
+            else:
+                r = m - 1
+
+        return False
+
+
+s = Solution()
+print(s.isPerfectSquare(16))   # True
+print(s.isPerfectSquare(14))   # False
+print(s.isPerfectSquare(1))    # True
+print(s.isPerfectSquare(808201))  # True (899^2)
+print(s.isPerfectSquare(808202))  # False
+
