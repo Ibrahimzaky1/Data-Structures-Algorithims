@@ -1,73 +1,50 @@
 from typing import List
+from collections import deque
 
 class Solution:
-    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        m = len(grid)
-        n = len(grid[0])
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        if not heights or not heights[0]:
+            return []
 
-        def dfs(i, j):
-            if i < 0 or i >= m or j < 0 or j >= n or grid[i][j] != 1:
-                return 0
-            grid[i][j] = 0
-            return 1 + dfs(i+1, j) + dfs(i, j-1) + dfs(i-1, j) + dfs(i, j+1)
-             
-        max_area = 0
+        m, n = len(heights), len(heights[0])
+        p_que = deque()
+        p_seen = set()
+        a_que = deque()
+        a_seen = set()
+
+        for j in range(n):
+            p_que.append((0, j))
+            p_seen.add((0, j))
+            a_que.append((m - 1, j))
+            a_seen.add((m - 1, j))
+
         for i in range(m):
-            for j in range(n):
-                if grid[i][j] == 1:
-                    max_area = max(max_area, dfs(i, j))
+            p_que.append((i, 0))
+            p_seen.add((i, 0))
+            a_que.append((i, n - 1))
+            a_seen.add((i, n - 1))
 
-        return max_area
-    
+        def bfs(que, seen):
+            while que:
+                i, j = que.popleft()
+                for di, dj in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    r, c = i + di, j + dj
+                    if 0 <= r < m and 0 <= c < n and (r, c) not in seen and heights[r][c] >= heights[i][j]:
+                        seen.add((r, c))
+                        que.append((r, c))
+
+        bfs(p_que, p_seen)
+        bfs(a_que, a_seen)
+
+        result = list(p_seen & a_seen)
+        return result
+
+
 sol = Solution()
-print(sol.maxAreaOfIsland([
-  [0,0,1,0,0,0,0,1,0,0,0,0,0],
-  [0,0,0,0,0,0,0,1,1,1,0,0,0],
-  [0,1,1,0,1,0,0,0,0,0,0,0,0],
-  [0,1,0,0,1,1,0,0,1,0,1,0,0],
-  [0,1,0,0,1,1,0,0,1,1,1,0,0],
-  [0,0,0,0,0,0,0,0,0,0,1,0,0],
-  [0,0,0,0,0,0,0,1,1,1,0,0,0],
-  [0,0,0,0,0,0,0,1,1,0,0,0,0]
+print(sol.pacificAtlantic([
+  [1, 2, 2, 3, 5],
+  [3, 2, 3, 4, 4],
+  [2, 4, 5, 3, 1],
+  [6, 7, 1, 4, 5],
+  [5, 1, 1, 2, 4]
 ]))
-
-
-
-
-from typing import List
-from collections import defaultdict
-
-class Solution:
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        g = defaultdict(list)
-        for a, b in prerequisites:
-            g[a].append(b)
-
-        UNVISITED = 0
-        VISITING = 1
-        VISITED = 2
-        states = [UNVISITED] * numCourses
-
-        def dfs(node):
-            if states[node] == VISITED:
-                return True
-            if states[node] == VISITING:
-                return False
-
-            states[node] = VISITING
-
-            for nei in g[node]:
-                if not dfs(nei): 
-                    return False
-                
-            states[node] = VISITED
-            return True
-
-        for i in range(numCourses):
-            if not dfs(i):
-                return False
-            
-        return True
-sol = Solution()
-print(sol.canFinish(2, [[1,0]]))        
-print(sol.canFinish(2, [[1,0],[0,1]]))  
