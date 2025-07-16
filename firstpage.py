@@ -1,156 +1,30 @@
 from typing import List
 
 class Solution:
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        n = len(heights)
-        stk = []
-        max_area = 0
-
-        for i, height in enumerate(heights):
-            start = i
-            while stk and height < stk[-1][0]:
-                h, j = stk.pop()
-                w = i - j
-                a = h * w
-                max_area = max(max_area, a)
-                start = j
-
-            stk.append((height, start))
-
-        while stk:
-            h, j = stk.pop()
-            w = n - j
-            max_area = max(max_area, h * w)
-
-        return max_area
-
-
-sol = Solution()
-print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))  
-
-
-
-
-
-from typing import List
-
-class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        x, y = m - 1, n - 1
-
-        for z in range(m + n - 1, -1, -1):
-            if x < 0:
-                nums1[z] = nums2[y]
-                y -= 1
-            elif y < 0:
-                break
-            elif nums1[x] > nums2[y]:
-                nums1[z] = nums1[x]
-                x -= 1
-            else:
-                nums1[z] = nums2[y]
-                y -= 1
-
-
-nums1 = [1, 2, 3, 0, 0, 0]
-m = 3
-nums2 = [2, 5, 6]
-n = 3
-
-sol = Solution()
-sol.merge(nums1, m, nums2, n)
-print(nums1)  
-
-
-
-
-
-
-
-
-from typing import List
-
-class Solution:
-    def removeElement(self, nums: List[int], val: int) -> int:
-        i = 0
+    def jump(self, nums: List[int]) -> int:
         n = len(nums)
+        smallest = [float('inf')]
 
-        while i < n:
-            if nums[i] == val:
-                nums[i] = nums[n - 1]
-                n -= 1
-            else:
-                i += 1
+        def backtrack(i=0, jumped=0):
+            if i >= n:
+                return
+            if i == n - 1:
+                smallest[0] = min(smallest[0], jumped)
+                return
 
-        return n
+            max_jump = nums[i]
+            max_reachable_index = min(i + max_jump, n - 1)
 
-nums = [3, 2, 2, 3]
-val = 3
+            for new_index in range(max_reachable_index, i, -1):
+                backtrack(new_index, jumped + 1)
 
-sol = Solution()
-k = sol.removeElement(nums, val)
-print("New length:", k)
-print("Modified list:", nums[:k])  
-
-
-
-
-
-
-
-from typing import List
-
-class Solution:
-    def removeDuplicates(self, nums: List[int]) -> int:
-        n = len(nums)
-        j = 1
-
-        for i in range(1, n):
-            if nums[i] != nums[i-1]:
-                nums[j] = nums[i]
-                j += 1
-
-        return j
+        backtrack()
+        return smallest[0]
 
 
 sol = Solution()
-nums = [0,0,1,1,1,2,2,3,3,4]
-length = sol.removeDuplicates(nums)
-print("Length after removing duplicates:", length)
-print("Modified array:", nums[:length])
-
-
-
-
-
-
-
-from typing import List
-
-class Solution:
-    def removeDuplicates(self, nums: List[int]) -> int:
-        j = 1
-        count = 1
-        n = len(nums)
-
-        for i in range(1, n):
-            if nums[i] == nums[i - 1]:
-                count += 1
-            else:
-                count = 1
-
-            if count <= 2:
-                nums[j] = nums[i]
-                j += 1
-
-        return j
-
-
-sol = Solution()
-nums = [0,0,1,1,1,2,2,3,3,4]
-length = sol.removeDuplicates(nums)
-print("Length after removing duplicates:", length)
-print("Modified array:", nums[:length])
+nums = [2, 3, 1, 1, 4]
+print("Minimum jumps:", sol.jump(nums))
 
     
 
@@ -159,34 +33,137 @@ print("Modified array:", nums[:length])
 
 
 
+from typing import List
+
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        smallest = 0
+        n = len(nums)
+        end, far = 0, 0
+
+        for i in range(n - 1):
+            far = max(far, i + nums[i])
+            if i == end:
+                smallest += 1
+                end = far
+
+        return smallest
+
+sol = Solution()
+nums = [2, 3, 1, 1, 4]
+print("Minimum jumps:", sol.jump(nums))
+
+
+
 
 
 from typing import List
 
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        i = 0
-        profit = 0
-        n = len(prices)
+    def hIndex(self, citation: List[int]) -> int:
+        n = len(citation)
+        paper_counts = [0] * (n + 1)
 
-        while i < n - 1:
-            while i < n - 1 and prices[i] >= prices[i + 1]:
-                i += 1
-            if i == n - 1:
-                break
-            lo = prices[i]
-            i += 1
+        for c in citation:
+            paper_counts[min(n, c)] += 1
 
-            
-            while i < n and prices[i] >= prices[i - 1]:
-                i += 1
-            hi = prices[i - 1]
+        h = n
+        papers = paper_counts[n]
 
-            profit += hi - lo
+        while h > 0 and papers < h:
+            h -= 1
+            papers += paper_counts[h]
 
-        return profit
+        return h
 
 
 sol = Solution()
-prices = [7,1,5,3,6,4]
-print("Max Profit:", sol.maxProfit(prices))
+print(sol.hIndex([3, 0, 6, 1, 5]))  
+
+
+
+class Solution:
+    def convertToBase7(self, num: int) -> str:
+        if num == 0:
+            return '0'
+        
+        negative = num < 0
+        num = abs(num)
+        remainders = []
+
+        while num > 0:
+            remainder = num % 7
+            remainders.append(str(remainder))
+            num //= 7
+
+        base7 = ''.join(reversed(remainders))
+        return '-' + base7 if negative else base7
+
+
+sol = Solution()
+print(sol.convertToBase7(100))   
+print(sol.convertToBase7(-7))    
+print(sol.convertToBase7(0))     
+
+
+
+
+
+
+
+
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        ans = 0
+        while n != 0:
+            ans += 1
+            n = n & (n - 1)
+        return ans
+
+
+sol = Solution()
+print(sol.hammingWeight(11))    
+print(sol.hammingWeight(128))    
+print(sol.hammingWeight(4294967293))  
+
+
+
+
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        a, b = int(a, 2), int(b, 2)
+
+        while b:
+            without_carry = a ^ b
+            carry = (a & b) << 1
+            a, b = without_carry, carry
+
+        return bin(a)[2:]
+
+
+sol = Solution()
+print(sol.addBinary("11", "1"))       
+print(sol.addBinary("1010", "1011"))  
+
+
+
+
+
+
+
+
+
+
+from typing import List
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        a = 0
+        for x in nums:
+            a ^= x
+        return a
+
+sol = Solution()
+print(sol.singleNumber([2, 2, 1]))        
+print(sol.singleNumber([4, 1, 2, 1, 2]))  
+print(sol.singleNumber([1]))             
